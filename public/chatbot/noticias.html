@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilo.css">
+    <link rel="icon" type="image/png" href="img/logonavbar.png">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <title>Notícias</title>
+</head>
+
+<body>
+    <nav class="sidebar">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="img/logo3.png" alt="logo">
+                </span>
+
+                <div class="text header-text">
+                    <span class="name"><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+                    <span class="profession">My Account</span>
+                </div>
+            </div>
+
+            <i class='bx bx-chevron-right toggle'></i>
+        </header>
+
+        <div class="menu-bar">
+            <div class="menu">
+                <li class="search-box">
+                    <i class='bx bx-search icon'></i>
+                    <input type="search" placeholder="Pesquisar...">
+                </li>
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="inicial.html">
+                            <i class='bx bx-home-alt icon'></i>
+                            <span class="text nav-text">Painel</span>
+
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="noticias.html">
+                            <i class='bx bx-news icon'></i>
+                            <span class="text nav-text">Notícias
+                            </span>
+
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="notification.html">
+                            <i class='bx bx-bell icon'></i>
+                            <span class="text nav-text">Notificação</span>
+
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="likes.html">
+                            <i class='bx bx-heart icon'></i>
+                            <span class="text nav-text">Likes</span>
+
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="sobre.html">
+                            <i class='bx bx-user icon' ></i>
+                            <span class="text nav-text">Sobre Nós</span>
+
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bottom-content">
+                <li class="butao">
+
+                    <button id="logoutButton" type="button">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text nav-text">Sair</span>
+                    </button>
+
+                </li>
+                <li class="mode">
+                    <div class="moon-sun">
+                        <i class='bx bx-moon icon moon'></i>
+                        <i class='bx bx-sun icon sun'></i>
+                    </div>
+                    <span class="mode-text text">Modo Escuro</span>
+
+                    <div class="toggle-switch">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <header class="noti">
+        <h1>Últimas Notícias sobre o ChatGPT</h1>
+    </header>
+
+    <section class="news-section">
+        <article class="news-card" id="noticia1">
+            <h2>Empresa do ChatGPT diz que novo modelo de IA consegue pensar “como uma pessoa”</h2>
+            <p>O ChatGPT, da OpenAI, é uma avançada ferramenta de inteligência artificial que utiliza processamento de
+                linguagem natural para gerar textos com alta qualidade e entendimento próximo ao humano, transformando o
+                cenário da tecnologia.</p>
+            <div class="full-content">
+                <p>A OpenAI lançou o modelo "o1", o primeiro de uma nova série, como uma prévia que receberá
+                    atualizações regulares
+                    e será disponibilizada para a maioria dos usuários do ChatGPT. Este modelo foi treinado para
+                    "pensar" mais antes
+                    de responder, refinando o processo de pensamento e explorando estratégias diferentes. Entre as
+                    aplicações destacadas
+                    estão anotações de dados em saúde e geração de fórmulas complexas para pesquisas em óptica quântica.
+                    O pesquisador Noam
+                    Brown enfatizou o potencial futuro da série, mencionando que futuras versões poderão "pensar" por
+                    períodos. O potencial dos novos modelos de IA também foi destacado por Noam Brown, um cientista pesquisador da empresa. “O o1 da OpenAI pensa por segundos, mas almejamos que versões futuras pensem por horas, dias, até semanas.</p>
+            </div>
+            <a href="https://www.cnnbrasil.com.br/tecnologia/empresa-do-chatgpt-diz-que-novo-modelo-de-ia-consegue-pensar-como-uma-pessoa/"
+                class="read-more" target="_blank">Leia mais</a>
+        </article>
+
+        <article class="news-card" id="noticia2">
+            <h2>Carros da Peugeot ganham ChatGPT integrado na multimídia</h2>
+            <p>A Peugeot integrou o ChatGPT em seus carros, oferecendo uma experiência multimídia interativa, onde os usuários podem interagir por voz para obter informações e sugestões personalizadas.</p>
+            <div class="full-content">
+                <p>A IA foi desenvolvida pela OpenAI e pode realizar várias tarefas de acordo com o prompt solicitado. A Peugeot utilizou 
+                    o recurso na multimídia do carro em um projeto piloto com a participação de mais de 10 mil clientes. Agora, a marca vai 
+                    usar o recurso em todos os modelos equipados com comando de voz, um dos sistemas que fazem parte do i-Cockpit. Entre as 
+                    possibilidades de uso, o cliente pode consultar informações sobre lugares e atividades. Por exemplo, ao chegar a uma nova 
+                    cidade, o motorista pode pedir dicas de pontos de interesse locais, aprender sobre a história desses lugares e até mesmo 
+                    obter orientação para chegar a um deles usando o sistema de navegação do carro. O ChatGPT nativo pode ainda fornecer atividades divertidas para crianças como jogos e quizzes.
+
+De acordo com a Peugeot, o ChatGPT estará nos novos novos 208, 2008, 308, 308 SW, 408, 508 e 508 SW, além de carros comerciais...</p>
+            </div>
+            <a href="https://www.cnnbrasil.com.br/auto/carros-da-peugeot-ganham-chatgpt-integrado-na-multimidia/" class="read-more" target="_blank">Leia mais</a>
+        </article>
+
+        <article class="news-card" id="noticia3">
+            <h2>Governo usará inteligência artificial para tentar reduzir impacto fiscal de perdas judiciais</h2>
+            <p>O governo pretende usar inteligência artificial para minimizar o impacto fiscal das perdas judiciais, utilizando a tecnologia para analisar processos e identificar padrões que possam ajudar a reduzir custos com litígios e melhorar a gestão das finanças públicas.</p>
+            <div class="full-content">
+                <p>O governo Luiz Inácio Lula da Silva contratou serviços da Microsoft e da OpenAI, criadora do ChatGPT, que serão usados pela 
+                    Advocacia-Geral da União (AGU) para acelerar a análise de milhares de ações judiciais com uso de inteligência artificial, focando 
+                    em temas que geram impacto fiscal. O Ministério do Planejamento liberou R$ 25 milhões em créditos suplementares para a AGU, destinados, 
+                    entre outros pontos, à execução de projetos estratégicos de tecnologia da informação. Com a iniciativa, o governo busca domar a 
+                    pesada conta de precatórios, que tem abocanhado parcela expressiva do orçamento público.
+
+                    O Planejamento calculou que gastará R$ 70,7 bilhões em 2025 com essas decisões judiciais nas quais o governo perdeu em última instância.
+                </p>
+            </div>
+            <a href="https://www.cnnbrasil.com.br/economia/macroeconomia/governo-usara-inteligencia-artificial-para-tentar-reduzir-impacto-fiscal-de-perdas-judiciais/" class="read-more" target="_blank">Leia mais</a>
+        </article>
+    </section>
+
+
+
+
+</body>
+
+</html>
+
+<script src="script.js"></script>
+
+<script>
+    document.getElementById("logoutButton").addEventListener("click", () => {
+        // Remover dados de sessão ou autenticação
+        localStorage.removeItem("userToken");
+        sessionStorage.removeItem("userToken");
+        document.cookie = "userToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+
+        // Redirecionar para a página de login
+        window.location.href = "/index.html"; // Aqui você coloca o caminho para a página de login
+    });
+</script>
+</body>

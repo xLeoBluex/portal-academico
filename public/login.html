@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login e Cadastro</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="login.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="overlay" id="overlay"></div>
+        <div class="popup" id="popup">
+            <button onclick="fecharPopup()" class="btn">Fechar</button>
+            <div class="popppp">
+                <h1>Reconhecimento Facial</h1>
+            </div>
+            <div class="video">
+                <!-- Inicia o feed de vídeo do Flask -->
+                <img src="http://localhost:5000/video_feed" width="500" height="350" />
+            </div>
+
+            <div id="status"></div>
+
+            <script>
+                // Função para verificar se o rosto foi reconhecido
+                function verificarReconhecimento() {
+                    fetch('http://localhost:5000/reconhecido')
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.reconhecido) {
+                                // Redireciona para o chatbot se o rosto for reconhecido
+                                window.location.href = '/chatbot/inicial.html';
+                            } else {
+                                // Se o rosto não for reconhecido, exibe uma mensagem
+                                document.getElementById('status').innerText = 'Rosto não reconhecido, tente novamente.';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erro ao verificar o reconhecimento:', error);
+                            document.getElementById('status').innerText = 'Erro na comunicação com o servidor. Tente novamente.';
+                        });
+                }
+
+                // Chama a função para verificar a cada 2 segundos
+                setInterval(verificarReconhecimento, 2000);
+            </script>
+        </div>
+
+        <!-- Formulário de Login -->
+        <div class="form-box login">
+            <form id="loginForm">
+                <h1>Login</h1>
+                <div class="input-box">
+                    <input type="email" id="loginEmail" placeholder="Email" required>
+                    <i class="bx bxs-user"></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                    <i class="bx bxs-lock-alt"></i>
+                </div>
+                <div class="forgot-link">
+                    <a href="#">Esqueceu a senha?</a>
+                </div>
+                <button type="submit" class="btn">Login</button>
+                
+            </form>
+        </div>
+
+        <!-- Formulário de Cadastro -->
+        <div class="form-box register">
+            <form id="registerForm">
+                <h1>Cadastro</h1>
+                <div class="input-box">
+                    <input type="text" id="registerName" placeholder="Nome" required>
+                    
+                </div>
+                <div class="input-box">
+                    <input type="email" id="registerEmail" placeholder="Email" required>
+                    
+                </div>
+                <div class="input-box">
+                    <input type="ra" id="registerra" placeholder="RA" required>
+                    
+                </div>
+                <div class="input-box">
+                    <select class="serie" id="serie" name="serie" required>
+                        <option value="">-- Selecione Série --</option>
+                        <option>6º Ano EF</option>
+                        <option>7º Ano E.F.</option>
+                        <option>8º Ano E.F.</option>
+                        <option>9º Ano E.F.</option>
+                        <option>1º Ano E.M.</option>
+                        <option>2º Ano E.M.</option>  
+                        <option>3º Ano E.M.</option>
+                    </select>
+                </div>
+                <div class="input-box">
+                    <select class="turno" id="turno" name="turno" required>
+                        <option value="">-- Selecione Turno --</option>
+                        <option>Manhã</option>
+                        <option>Tarde</option>
+                        <option>Noite</option>
+                    </select>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="registerPassword" placeholder="Password" required>
+                    
+                </div>
+                <button type="submit" class="btn">Cadastro</button>
+        
+    
+            </form>
+        </div>
+
+        <!-- Painéis alternativos -->
+        <div class="toggle-box">
+            <div class="toggle-panel toggle-left">
+                <h1>Olá, Bem vindo!</h1>
+                <p>Não tem uma conta ainda?</p>
+                <button class="btn register-btn">Cadastrar</button>
+                <button onclick="abrirPopup()" class="btn register-btn">FaceID</button>
+            </div>
+            <div class="toggle-panel toggle-right">
+                <h1>Bem-vindo de volta!</h1>
+                <p>Já tem uma conta?</p>
+                <button class="btn login-btn">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função para exibir mensagens
+        const showMessage = (message) => alert(message);
+
+        // Enviar formulário de registro
+        document.getElementById("registerForm").addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const name = document.getElementById("registerName").value;
+            const email = document.getElementById("registerEmail").value;
+            const password = document.getElementById("registerPassword").value;
+
+            try {
+                const response = await fetch("http://localhost:3000/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ name, email, password }),
+                });
+
+                if (response.ok) {
+                    showMessage("Usuário cadastrado com sucesso!");
+                } else {
+                    const error = await response.text();
+                    showMessage(`Erro: ${error}`);
+                }
+            } catch (error) {
+                console.error("Erro na requisição:", error);
+                showMessage("Erro ao conectar ao servidor.");
+            }
+        });
+
+        // Enviar formulário de login
+        document.getElementById("loginForm").addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const email = document.getElementById("loginEmail").value;
+            const password = document.getElementById("loginPassword").value;
+
+            try {
+                const response = await fetch("http://localhost:3000/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                if (response.ok) {
+
+                    // Redireciona para a página do chatbot após login bem-sucedido
+                    window.location.href = "/chatbot/inicial.html";
+                } else {
+                    const error = await response.text();
+                    showMessage(`Erro: ${error}`);
+                }
+            } catch (error) {
+                console.error("Erro na requisição:", error);
+                showMessage("Erro ao conectar ao servidor.");
+            }
+        });
+
+        // Funções para alternar entre login e registro (opcional)
+        document.querySelector(".register-btn").addEventListener("click", () => {
+            document.querySelector(".container").classList.add("register-mode");
+        });
+
+        document.querySelector(".login-btn").addEventListener("click", () => {
+            document.querySelector(".container").classList.remove("register-mode");
+        });
+    </script>
+    <script src="login.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cadastro de Aluno</title>
+  <style>
+    /* Estilo mínimo só para ficar legível — remova se quiser totalmente cru */
+    body { font-family: Arial, sans-serif; padding: 24px; background:#f7f7f7; }
+    form { background:#fff; padding:16px; border-radius:6px; max-width:440px; box-shadow:0 1px 4px rgba(0,0,0,0.08); }
+    label { display:block; margin-top:10px; font-size:14px; }
+    input, select, button { width:100%; padding:8px; margin-top:6px; box-sizing:border-box; font-size:14px; }
+    button { margin-top:16px; cursor:pointer; }
+    .small { font-size:13px; color:#666; margin-top:4px; }
+  </style>
+</head>
+<body>
+  <h1>Cadastro de Aluno</h1>
+
+  <!-- Ajuste o action para o endpoint que receberá o POST -->
+  <form action="/cadastro" method="POST" autocomplete="off" novalidate>
+    <label for="ra">RA</label>
+    <input id="ra" name="ra" inputmode="numeric" required placeholder="Ex: 0000123456789-0" min="1" />
+
+    <label for="nome">Nome</label>
+    <input id="nome" name="nome" type="text" required placeholder="Nome completo" />
+
+    <label for="serie">Série</label>
+    <select id="serie" name="serie" required>
+      <option value="">-- selecione --</option>
+      <option>6º Ano EF</option>
+      <option>7º Ano E.F.</option>
+      <option>8º Ano E.F.</option>
+      <option>9º Ano E.F.</option>
+      <option>1º Ano E.M.</option>
+      <option>2º Ano E.M.</option>  
+      <option>3º Ano E.M.</option>
+    </select>
+
+    <label for="email">E-mail</label>
+    <input id="email" name="email" type="email" required placeholder="seu@exemplo.com" />
+
+    <label for="senha">Senha</label>
+    <input id="senha" name="senha" type="password" required minlength="6" placeholder="Senha (mín. 6 caracteres)" />
+
+    <label for="turno">Turno</label>
+    <select id="turno" name="turno" required>
+      <option value="">-- selecione --</option>
+      <option>Manhã</option>
+      <option>Tarde</option>
+      <option>Noite</option>
+    </select>
+
+    <button type="submit">Cadastrar</button>
+  </form>
+
+    <script src="cadastro.js"></script>
+</body>
+</html>

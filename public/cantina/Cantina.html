@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardápio Escolar - Setembro 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #4a5568 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a202c, #2d3748);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="20" cy="20" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="30" r="1.5" fill="rgba(255,255,255,0.1)"/></svg>');
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .school-info {
+            background: #f7fafc;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .school-info h2 {
+            color: #2d3748;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .school-info p {
+            color: #4a5568;
+            font-size: 1rem;
+        }
+
+        .nav-weeks {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 20px;
+            background: #edf2f7;
+        }
+
+        .week-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: #4a5568;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .week-btn:hover, .week-btn.active {
+            background: #2d3748;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .week-content {
+            display: none;
+            padding: 30px;
+        }
+
+        .week-content.active {
+            display: block;
+        }
+
+        .week-title {
+            text-align: center;
+            font-size: 1.8rem;
+            color: #2d3748;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 10px;
+            border-left: 5px solid #4a5568;
+            font-weight: bold;
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .day-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .day-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .day-header {
+            background: linear-gradient(45deg, #4a5568, #2d3748);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .weekend-card {
+            background: #f7fafc;
+            border: 2px dashed #cbd5e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 150px;
+        }
+
+        .weekend-text {
+            color: #718096;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .meal {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #f7fafc;
+            border-radius: 8px;
+            border-left: 4px solid #4a5568;
+        }
+
+        .meal-type {
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .meal-description {
+            color: #4a5568;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .nutrition-info {
+            background: linear-gradient(135deg, #2d3748, #4a5568);
+            color: white;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .nutrition-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .nutrition-daily {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .nutrition-daily h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.3rem;
+        }
+
+        .nutrition-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .nutri-item {
+            background: #f7fafc;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .nutri-value {
+            font-weight: bold;
+            color: #2d3748;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .nutri-label {
+            font-size: 0.8rem;
+            color: #718096;
+            text-transform: uppercase;
+        }
+
+        .observations {
+            background: #edf2f7;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .observations h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .obs-item {
+            margin-bottom: 10px;
+            color: #4a5568;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .footer-info {
+            background: #1a202c;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .footer-info h3 {
+            margin-bottom: 15px;
+            color: #f7fafc;
+        }
+
+        .footer-info p {
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .days-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .week-btn {
+                padding: 10px 16px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍽️ Cardápio Escolar PEI</h1>
+            <p>Programa de Ensino Integral - Setembro 2025</p>
+        </div>
+
+        <div class="school-info">
+            <h2>Setor: TODOS</h2>
+            <p>Cardápio sujeito a alterações | Nutricionista: Nívea C. M. Takemoto - CRN 3-7883</p>
+        </div>
+
+        <div class="nav-weeks">
+            <button class="week-btn active" onclick="showWeek(1)">Cardápio - Semana 1 (1-7)</button>
+            <button class="week-btn" onclick="showWeek(2)">Cardápio - Semana 2 (8-14)</button>
+            <button class="week-btn" onclick="showWeek(3)">Cardápio - Semana 3 (15-21)</button>
+            <button class="week-btn" onclick="showWeek(4)">Cardápio - Semana 4 (22-28)</button>
+            <button class="week-btn" onclick="showWeek(5)">Cardápio - Semana 5 (29-3/10)</button>
+        </div>
+
+        <div id="week1" class="week-content active">
+            <h2 class="week-title">Primeira Semana - Dias 1 a 7 de Setembro</h2>
+            <div class="days-grid">
+                <div class="day-card">
+                    <div class="day-header">Quarta-feira - Dia 02/10</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Biscoito salgado / Leite com cacau</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Salada de couve / Arroz e feijão preto / Filé de frango acebolado / Ameixa</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Biscoito salgado / Leite com cacau</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">1158 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">65g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">30g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">163g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">1492mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">Quinta-feira - Dia 03/10</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Leite com flocos de milho</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Salada de alface / Macarrão ao molho de frango (tiras) / Melancia</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Leite com flocos de milho</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">883 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">37g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">19g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">144g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">502mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">Sexta-feira - Dia 04/10</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Biscoito salgado / Leite com cacau</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Arroz e feijão carioca / Carne em cubos ao molho / Farofa de proteína texturizada / Maçã</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Biscoito salgado / Leite com cacau</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">1243 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">56g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">29g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">194g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">1929mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="nutrition-info">
+            <h2>📊 Informações Nutricionais Médias do Mês</h2>
+            <p>Baseado no cardápio completo de setembro de 2025</p>
+            <div class="nutrition-stats">
+                <div class="stat-card">
+                    <div class="stat-number">1097,2</div>
+                    <div class="stat-label">kcal/dia</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">46,2g</div>
+                    <div class="stat-label">Proteínas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">27,6g</div>
+                    <div class="stat-label">Lipídeos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">169,6g</div>
+                    <div class="stat-label">Carboidratos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1348,6mg</div>
+                    <div class="stat-label">Sódio</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="observations">
+            <h3>📝 Observações Importantes</h3>
+            <div class="obs-item"><strong>*</strong> Milho e seleta de legumes: produtos em conserva (lata)</div>
+            <div class="obs-item"><strong>**</strong> Polpa de fruta congelada</div>
+            <div class="obs-item"><strong>***</strong> Peito de frango cozido e desfiado / Carne suína cozida em cubos. Produtos em embalagem à vácuo. Entregue junto com a merenda mensal. Não necessita refrigeração (embalagem fechada)</div>
+            <div class="obs-item"><strong>****</strong> Kibe congelado / Bolinho misto - embalagens de 2kg, entregas ponto a ponto no dia anterior ao consumo. Preparar conforme instruções do fabricante</div>
+            <div class="obs-item"><strong>Aceitabilidade:</strong> O - Ótimo | B - Bom | R - Regular | M - Má</div>
+            <div class="obs-item">Aceitabilidade com visto da direção: cozinheiros deverão preencher e a direção deverá dar um visto diariamente quanto à aceitabilidade</div>
+        </div>
+
+        <div class="footer-info">
+            <h3>👩‍⚕️ Responsável Técnica</h3>
+            <p><strong>Nívea C. M. Takemoto</strong></p>
+            <p>Nutricionista CRN 3 - 7883</p>
+            <p>Programa de Ensino Integral - PEI</p>
+            <p><em>Cardápio sujeito a alterações</em></p>
+        </div>
+    </div>
+
+    <script>
+        function showWeek(weekNumber) {
+            // Remove active class from all buttons and contents
+            const buttons = document.querySelectorAll('.week-btn');
+            const contents = document.querySelectorAll('.week-content');
+            
+            buttons.forEach(btn => btn.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Add active class to selected button and content
+            buttons[weekNumber - 1].classList.add('active');
+            document.getElementById(`week${weekNumber}`).classList.add('active');
+        }
+    </script>
+                    <div class="day-header">Segunda-feira - Dia 02/09</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Biscoito doce / Leite com cacau</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Salada de seleta / Arroz e feijão carioca / Picadinho de proteína texturizada de soja</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Biscoito doce / Leite com cacau</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">992 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">34g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">24g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">163g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">1617mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">Terça-feira - Dia 03/09</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Pão com requeijão / Suco de morango</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Salada de acelga / Arroz e feijão carioca / Frango refogado (cubos) / Banana</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Pão com requeijão / Suco de morango</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">1172 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">60g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">24g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">180g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">1767mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">Quarta-feira - Dia 04/09</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Biscoito salgado / Leite com cacau</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Salada de alface / Arroz e feijão carioca / Carne de panela / Maçã</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Biscoito salgado / Leite com cacau</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">1103 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">49g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">30g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">163g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">1399mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">Quinta-feira - Dia 05/09</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Leite com flocos de milho</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Salada de catalonha / Macarrão ao molho de carne moída / Ameixa</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Leite com flocos de milho</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">904 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">37g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">20g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">148g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">503mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">Sexta-feira - Dia 06/09</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Bolo mármore / Suco de maçã integral</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Arroz e feijão preto / Iscas de pernil aceboladas / Viradinho de repolho / Melancia</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Bolo mármore / Suco de maçã integral</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">1176 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">43g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">25g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">200g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">1330mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card weekend-card">
+                    <div class="weekend-text">
+                        Sábado - Dia 07/09<br>
+                        Domingo - Dia 08/09<br>
+                        <strong>Final de Semana</strong><br>
+                        Sem atividades escolares
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="week2" class="week-content">
+            <h2 class="week-title">Segunda Semana - Dias 8 a 14 de Setembro</h2>
+            <div class="days-grid">
+                <div class="day-card">
+                    <div class="day-header">Segunda-feira - Dia 09/09</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Biscoito doce / Leite com cacau</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Salada de beterraba / Arroz e feijão carioca / Omelete de cheiro-verde</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Biscoito doce / Leite com cacau</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">1093 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">41g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">34g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">155g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">1461mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">Terça-feira - Dia 10/09</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Pão integral com manteiga / Leite com cacau</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Salada de alface / Arroz e feijão carioca / Bife acebolado / Maçã</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Pão integral com manteiga / Leite com cacau</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">1332 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">53g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">46g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">178g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">1613mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">Quarta-feira - Dia 11/09</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Biscoito salgado / Leite com cacau</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Salada de acelga / Arroz e feijão preto / Coxa e sobrecoxa de frango ao forno / Banana</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Biscoito salgado / Leite com cacau</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">1201 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">61g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">32g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">175g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">1447mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">Quinta-feira - Dia 12/09</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Leite com flocos de milho</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Salada de chicória / Macarrão / Almôndegas bovinas ao sugo / Melancia</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Leite com flocos de milho</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">1109 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">47g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">37g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">157g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">994mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">Sexta-feira - Dia 13/09</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Pão integral com requeijão / Leite com cacau</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Arroz e feijão carioca / Estrogonofe de frango / Batata sauté / Ameixa</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Pão integral com requeijão / Leite com cacau</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">1228 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">53g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">30g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">189g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">1883mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card weekend-card">
+                    <div class="weekend-text">
+                        Sábado - Dia 14/09<br>
+                        Domingo - Dia 15/09<br>
+                        <strong>Final de Semana</strong><br>
+                        Sem atividades escolares
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="week3" class="week-content">
+            <h2 class="week-title">Terceira Semana - Dias 15 a 21 de Setembro</h2>
+            <div class="days-grid">
+                <div class="day-card">
+                    <div class="day-header">Segunda-feira - Dia 16/09</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Leite com flocos de milho</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Arroz e feijão carioca / Ovos mexidos / Virado de abobrinha</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Leite com flocos de milho</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">993 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">40g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">26g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">148g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">1976mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">Terça-feira - Dia 17/09</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Pão com patê de atum / Suco de caju</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Salada de alface / Macarrão ao molho de carne moída / Banana</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Pão com patê de atum / Suco de caju</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">1014 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">38g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">19g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">179g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">925mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">Quarta-feira - Dia 18/09</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Biscoito doce / Leite com cacau</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Salada de chicória / Arroz e feijão preto / Bolinho misto / Pêra</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Biscoito doce / Leite com cacau</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">1170 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">47g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">28g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">187g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">1406mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">Quinta-feira - Dia 19/09</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Bolo de milho com flocos de goiaba / Leite com cacau</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Arroz e feijão carioca / Filezinho de frango / Creme de milho / Maçã</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Bolo de milho com flocos de goiaba / Leite com cacau</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">1163 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">52g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">26g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">183g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">1322mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">Sexta-feira - Dia 20/09</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Leite com flocos de milho</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Salada de almeirão / Arroz e feijão preto / Carne suína refogada com tomate / Ameixa</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Leite com flocos de milho</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">1069 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">49g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">30g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">154g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">828mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card weekend-card">
+                    <div class="weekend-text">
+                        Sábado - Dia 21/09<br>
+                        Domingo - Dia 22/09<br>
+                        <strong>Final de Semana</strong><br>
+                        Sem atividades escolares
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="week4" class="week-content">
+            <h2 class="week-title">Quarta Semana - Dias 22 a 28 de Setembro</h2>
+            <div class="days-grid">
+                <div class="day-card">
+                    <div class="day-header">Segunda-feira - Dia 23/09</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Biscoito salgado / Leite com cacau</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Salada de seleta / Arroz e feijão carioca / Picadinho de proteína texturizada de soja</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Biscoito salgado / Leite com cacau</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">987 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">35g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">26g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">160g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">1868mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">Terça-feira - Dia 24/09</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Pão integral com requeijão / Leite com cacau</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Salada de acelga / Arroz e feijão preto / Iscas de pernil refogadas / Maçã</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Pão integral com requeijão / Leite com cacau</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">1325 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">58g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">42g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">184g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">1351mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">Quarta-feira - Dia 25/09</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Leite com flocos de milho</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Salada de alface / Macarrão ao molho de carne moída / Banana</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Leite com flocos de milho</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">945 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">37g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">20g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">160g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">501mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">Quinta-feira - Dia 26/09</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Biscoito doce / Suco de caju</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Salada de couve / Arroz e feijão preto / Bife acebolado / Ameixa</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Biscoito doce / Suco de caju</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">978 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">40g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">24g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">152g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">1174mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">Sexta-feira - Dia 27/09</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Bolo de laranja / Suco de maçã integral</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Salada de brócolis / Arroz e feijão preto / Kibe assado / Pêra</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Bolo de laranja / Suco de maçã integral</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">1059 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">37g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">16g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">190g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">1351mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card weekend-card">
+                    <div class="weekend-text">
+                        Sábado - Dia 28/09<br>
+                        Domingo - Dia 29/09<br>
+                        <strong>Final de Semana</strong><br>
+                        Sem atividades escolares
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="week5" class="week-content">
+            <h2 class="week-title">Quinta Semana - Dias 29 de Setembro a 3 de Outubro</h2>
+            <div class="days-grid">
+                <div class="day-card">
+                    <div class="day-header">Segunda-feira - Dia 30/09</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Leite com flocos de milho</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Salada de vagem / Arroz e feijão carioca / Omelete de forno</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Leite com flocos de milho</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">908 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">35g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">21g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">145g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">1431mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <div class="day-header">Terça-feira - Dia 01/10</div>
+                    <div class="meal">
+                        <div class="meal-type">Café da Manhã</div>
+                        <div class="meal-description">Pão com manteiga / Suco de caju</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Almoço</div>
+                        <div class="meal-description">Salada de chicória / Arroz e feijão preto / Carne moída à primavera (com seleta) / Banana</div>
+                    </div>
+                    <div class="meal">
+                        <div class="meal-type">Lanche da Tarde</div>
+                        <div class="meal-description">Pão com manteiga / Suco de caju</div>
+                    </div>
+                    <div class="nutrition-daily">
+                        <h3>Valores Nutricionais</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item">
+                                <div class="nutri-value">1229 kcal</div>
+                                <div class="nutri-label">Energia</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">51g</div>
+                                <div class="nutri-label">Proteína</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">32g</div>
+                                <div class="nutri-label">Lipídeos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">188g</div>
+                                <div class="nutri-label">Carboidratos</div>
+                            </div>
+                            <div class="nutri-item">
+                                <div class="nutri-value">1646mg</div>
+                                <div class="nutri-label">Sódio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="day-card">

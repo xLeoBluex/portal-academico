@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receber Comunicados - Sala do Futuro</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Partículas animadas de fundo */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+      animation: float 12s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { 
+        transform: translateY(0px) translateX(0px) rotate(0deg) scale(1);
+        opacity: 0.4;
+      }
+      25% { 
+        transform: translateY(-40px) translateX(30px) rotate(90deg) scale(1.2);
+        opacity: 0.7;
+      }
+      50% { 
+        transform: translateY(-80px) translateX(-20px) rotate(180deg) scale(0.8);
+        opacity: 0.4;
+      }
+      75% { 
+        transform: translateY(-40px) translateX(-40px) rotate(270deg) scale(1.1);
+        opacity: 0.8;
+      }
+    }
+
+    /* Container principal */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
+      margin: 0 auto;
+      animation: slideInFromTop 1s ease-out;
+    }
+
+    @keyframes slideInFromTop {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .header h1 {
+      font-size: 3.5rem;
+      color: white;
+      font-weight: 700;
+      margin-bottom: 15px;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      animation: pulse 4s ease-in-out infinite;
+      position: relative;
+    }
+
+    @keyframes pulse {
+      0%, 100% { 
+        text-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
+        transform: scale(1);
+      }
+      50% { 
+        text-shadow: 0 4px 40px rgba(255, 255, 255, 0.6), 
+                     0 0 60px rgba(255, 255, 255, 0.3);
+        transform: scale(1.02);
+      }
+    }
+
+    .status-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 12px 20px;
+      border-radius: 25px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 10px;
+    }
+
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      background: #4CAF50;
+      border-radius: 50%;
+      animation: statusPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes statusPulse {
+      0%, 100% { 
+        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+        transform: scale(1);
+      }
+      50% { 
+        box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+        transform: scale(1.1);
+      }
+    }
+
+    /* Container dos comunicados */
+    .comunicados-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 25px;
+      padding: 40px;
+      box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+      min-height: 400px;
+    }
+
+    .comunicados-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.05), transparent);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    /* Lista de comunicados */
+    #listaComunicados {
+      list-style: none;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Estado vazio */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #666;
+      animation: fadeIn 1s ease-out;
+    }
+
+    .empty-state .icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .empty-state h3 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: #444;
+    }
+
+    .empty-state p {
+      font-size: 1rem;
+      color: #666;
+    }
+
+    /* Estilos dos comunicados */
+    .comunicado-item {
+      background: white;
+      border-radius: 20px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(102, 126, 234, 0.1);
+      border-left: 5px solid transparent;
+      border-image: linear-gradient(135deg, #667eea, #764ba2) 1;
+      position: relative;
+      overflow: hidden;
+      animation: slideInFromRight 0.6s ease-out;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes slideInFromRight {
+      from {
+        opacity: 0;
+        transform: translateX(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .comunicado-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(102, 126, 234, 0.2);
+    }
+
+    .comunicado-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+    }
+
+    .comunicado-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .comunicado-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #333;
+      margin: 0;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .comunicado-time {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .comunicado-message {
+      color: #555;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 15px;
+      word-wrap: break-word;
+    }
+
+    .comunicado-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 15px;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    .comunicado-id {
+      font-size: 0.8rem;
+      color: #999;
+      font-family: monospace;
+      background: #f8f9fa;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .comunicado-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .action-btn {
+      background: transparent;
+      border: 2px solid #e1e8f0;
+      border-radius: 10px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .action-btn:hover {
+      border-color: #667eea;
+      color: #667eea;
+      transform: translateY(-2px);
+    }
+
+    .action-btn.mark-read {
+      color: #4CAF50;
+      border-color: #4CAF50;
+    }
+
+    .action-btn.delete {
+      color: #f44336;
+      border-color: #f44336;
+    }
+
+    /* Comunicado novo (destaque) */
+    .comunicado-item.new {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+      animation: newComunicado 1s ease-out;
+    }
+
+    @keyframes newComunicado {
+      0% {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+        transform: scale(1.02);
+      }
+      100% {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+        transform: scale(1);
+      }
+    }
+
+    /* Badge de novo comunicado */
+    .new-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: linear-gradient(135deg, #ff4757, #ff3838);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      animation: badgePulse 2s ease-in-out infinite;
+    }
+
+    @keyframes badgePulse {
+      0%, 100% { 
+        box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7);
+      }
+      50% { 
+        box-shadow: 0 0 0 8px rgba(255, 71, 87, 0);
+      }
+    }
+
+    /* Notificação toast para novos comunicados */
+    .notification-toast {
+      position: fixed;
+      top: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 20px 25px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      transform: translateX(400px);
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-width: 350px;
+    }
+
+    .notification-toast.show {
+      transform: translateX(0);
+    }
+
+    .notification-icon {
+      font-size: 1.5rem;
+      animation: rotate 2s linear infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .container {
+        margin: 0 10px;
+      }
+      
+      .comunicados-container {
+        padding: 25px 20px;
+        border-radius: 20px;
+      }
+      
+      .header h1 {
+        font-size: 2.5rem;
+      }
+      
+      .comunicado-item {
+        padding: 20px;
+        border-radius: 15px;
+      }
+      
+      .comunicado-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .comunicado-title {
+        font-size: 1.2rem;
+        min-width: auto;
+      }
+      
+      .comunicado-footer {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+      }
+
+      .notification-toast {
+        right: 15px;
+        left: 15px;
+        transform: translateY(-100px);
+        max-width: none;
+      }
+      
+      .notification-toast.show {
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header h1 {
+        font-size: 2rem;
+      }
+      
+      .comunicados-container {
+        padding: 20px 15px;
+      }
+      
+      .comunicado-item {
+        padding: 15px;
+      }
+      
+      .empty-state {
+        padding: 40px 15px;
+      }
+      
+      .empty-state .icon {
+        font-size: 3rem;
+      }
+    }
+
+    /* Animações de fade */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
+    /* Scroll customizado */
+    .comunicados-container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .comunicados-container::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+
+    .comunicados-container::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 10px;
+    }
+
+    .comunicados-container::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, #5a6fd8, #6a4190);
+    }
+  </style>
+</head>
+<body>
+  <!-- Partículas de fundo -->
+  <div class="particles" id="particles"></div>
+
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>Comunicados em Tempo Real</h1>
+      <div class="status-indicator">
+        <div class="status-dot"></div>
+        <span>Conectado e aguardando comunicados...</span>
+      </div>
+    </div>
+
+    <!-- Container dos comunicados -->
+    <div class="comunicados-container">
+      <ul id="listaComunicados">
+        <!-- Estado vazio inicial -->
+        <div class="empty-state" id="emptyState">
+          <div class="icon">📬</div>
+          <h3>Nenhum comunicado ainda</h3>
+          <p>Aguarde! Os comunicados aparecerão aqui em tempo real.</p>
+        </div>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Toast de notificação -->
+  <div class="notification-toast" id="notificationToast">
+    <span class="notification-icon">🔔</span>
+    <span class="notification-text">Novo comunicado recebido!</span>
+  </div>
+
+  <script>
+    // Criar partículas animadas
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 35;
+
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        const size = Math.random() * 12 + 4;
+        const positionX = Math.random() * window.innerWidth;
+        const positionY = Math.random() * window.innerHeight;
+        const animationDelay = Math.random() * 12;
+        
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        particle.style.left = positionX + 'px';
+        particle.style.top = positionY + 'px';
+        particle.style.animationDelay = animationDelay + 's';
+        
+        particlesContainer.appendChild(particle);
+      }
+    }
+
+    // Funções utilitárias
+    function formatTime(date) {
+      return new Intl.DateTimeFormat('pt-BR', {
+        hour: '2-digit',
+        minute: '2-digit',
+        day: '2-digit',
+        month: '2-digit'
+      }).format(date);
+    }
+
+    function generateId() {
+      return Math.random().toString(36).substr(2, 9);
+    }
+
+    // Mostrar notificação toast
+    function showNotification(message = 'Novo comunicado recebido!') {
+      const toast = document.getElementById('notificationToast');
+      const textElement = toast.querySelector('.notification-text');
+      
+      textElement.textContent = message;
+      toast.classList.add('show');
+      
+      // Som de notificação (opcional)
+      playNotificationSound();
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 4000);
+    }
+
+    // Som de notificação simples
+    function playNotificationSound() {
+      // Criar um beep usando Web Audio API
+      try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 800;
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.5);
+      } catch (e) {
+        // Se não conseguir tocar o som, não faz nada
+        console.log('Não foi possível tocar o som de notificação');
+      }
+    }
+
+    // Adicionar comunicado à lista
+    function addComunicadoToList(comunicado) {
+      const lista = document.getElementById('listaComunicados');
+      const emptyState = document.getElementById('emptyState');
+      
+      // Remover estado vazio se existir
+      if (emptyState) {
+        emptyState.remove();
+      }
+      
+      // Criar elemento do comunicado
+      const li = document.createElement('li');
+      li.className = 'comunicado-item new';
+      li.dataset.id = comunicado.id || generateId();
+      
+      const currentTime = formatTime(new Date());
+      
+      li.innerHTML = `
+        <div class="new-badge">NOVO</div>
+        <div class="comunicado-header">
+          <h3 class="comunicado-title">${comunicado.titulo || 'Comunicado'}</h3>
+          <span class="comunicado-time">${currentTime}</span>
+        </div>
+        <div class="comunicado-message">${comunicado.mensagem || 'Mensagem do comunicado'}</div>
+        <div class="comunicado-footer">
+          <div class="comunicado-id">ID: ${li.dataset.id}</div>
+          <div class="comunicado-actions">
+            <button class="action-btn mark-read" onclick="markAsRead('${li.dataset.id}')">
+              ✓ Marcar como lido
+            </button>
+            <button class="action-btn delete" onclick="deleteComunicado('${li.dataset.id}')">
+              🗑️ Excluir
+            </button>
+          </div>
+        </div>
+      `;
+      
+      // Inserir no início da lista
+      lista.insertBefore(li, lista.firstChild);
+      
+      // Remover badge "NOVO" após 10 segundos
+      setTimeout(() => {
+        const badge = li.querySelector('.new-badge');
+        if (badge) {
+          badge.style.animation = 'fadeOut 0.5s ease-out';
+          setTimeout(() => badge.remove(), 500);
+        }
+        li.classList.remove('new');
+      }, 10000);
+      
+      // Mostrar notificação
+      showNotification(`Novo comunicado: ${comunicado.titulo}`);
+    }
+
+    // Marcar como lido
+    function markAsRead(id) {
+      const item = document.querySelector(`[data-id="${id}"]`);
+      if (item) {
+        item.style.opacity = '0.7';
+        item.style.background = '#f8f9fa';
+        
+        const markBtn = item.querySelector('.mark-read');
+        markBtn.innerHTML = '✓ Lido';
+        markBtn.disabled = true;
+        markBtn.style.opacity = '0.5';
+        markBtn.style.cursor = 'default';
+      }
+    }
+
+    // Excluir comunicado
+    function deleteComunicado(id) {
+      const item = document.querySelector(`[data-id="${id}"]`);
+      if (item && confirm('Tem certeza que deseja excluir este comunicado?')) {
+        item.style.animation = 'fadeOut 0.5s ease-out';
+        item.style.transform = 'translateX(-100%)';
+        
+        setTimeout(() => {
+          item.remove();
+          
+          // Verificar se não há mais comunicados
+          const lista = document.getElementById('listaComunicados');
+          if (lista.children.length === 0) {
+            const emptyState = document.createElement('div');
+            emptyState.className = 'empty-state';
+            emptyState.id = 'emptyState';
+            emptyState.innerHTML = `
+              <div class="icon">📬</div>
+              <h3>Nenhum comunicado</h3>
+              <p>Todos os comunicados foram removidos.</p>
+            `;
+            lista.appendChild(emptyState);
+          }
+        }, 500);
+      }
+    }
+
+
+
+    // Inicializar página
+    window.addEventListener('load', () => {
+      createParticles();
+      
+      // Iniciar simulação após 3 segundos (remover em produção)
+      setTimeout(simulateComunicados, 3000);
+    });
+
+    // Recriar partículas ao redimensionar
+    window.addEventListener('resize', () => {
+      document.getElementById('particles').innerHTML = '';
+      createParticles();
+    });
+
+    // Expor funções globalmente para uso pelo receiver.js
+    window.addComunicadoToList = addComunicadoToList;
+    window.markAsRead = markAsRead;
+    window.deleteComunicado = deleteComunicado;
+  </script>
+
+  <script type="module" src="receiver.js"></script>
+</body>
+</html>
