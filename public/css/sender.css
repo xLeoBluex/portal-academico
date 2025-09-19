@@ -104,7 +104,7 @@
   
   /* Card do formulário */
   .form-card {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(235, 235, 235, 0.473);
     backdrop-filter: blur(20px);
     border-radius: 25px;
     padding: 50px;
@@ -243,7 +243,7 @@
     border: none;
     border-radius: 15px;
     background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
+    color: rgb(0, 0, 0);
     font-size: 18px;
     font-weight: 700;
     cursor: pointer;
@@ -294,6 +294,7 @@
   }
   
   .input-with-icon {
+    background-color: rgba(235, 235, 235, 0.473);
     padding-left: 60px !important;
   }
   
@@ -347,7 +348,7 @@
     top: 30px;
     right: 30px;
     background: linear-gradient(135deg, #4CAF50, #45a049);
-    color: white;
+    color: rgb(0, 0, 0);
     padding: 20px 30px;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);

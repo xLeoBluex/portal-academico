@@ -6,19 +6,22 @@ import { firebaseConfig } from "./config.js";
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Onde vamos listar os comunicados
-const lista = document.getElementById("listaComunicados");
-
 // Query ordenada por data
 const comunicadosRef = query(collection(db, "comunicados"), orderBy("criadoEm", "desc"));
 
 // Escuta em tempo real
 onSnapshot(comunicadosRef, (snapshot) => {
-  lista.innerHTML = "";
-  snapshot.forEach((doc) => {
-    const dados = doc.data();
-    const li = document.createElement("li");
-    li.textContent = `${dados.titulo}: ${dados.mensagem}`;
-    lista.appendChild(li);
+  snapshot.docChanges().forEach((change) => {
+    // Apenas reage a novos comunicados adicionados
+    if (change.type === "added") {
+      const dados = change.doc.data();
+      // Adiciona o ID do documento para uso nas funções de UI
+      dados.id = change.doc.id;
+
+      // Chama a função global do receiver-ui.js para adicionar o item à lista
+      if (window.addComunicadoToList) {
+        window.addComunicadoToList(dados);
+      }
+    }
   });
 });
