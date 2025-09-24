@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduPlatform - Portal do Estudante</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/portal-aluno.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">E</div>
+                <div>
+                    <div class="sidebar-title">EduPlatform</div>
+                    <div class="sidebar-subtitle">Portal do Estudante</div>
+                </div>
+            </div>
+
+            <nav class="nav">
+                <button class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </button>
+                <button class="nav-item" data-section="grades">
+                    <i class="fas fa-chart-line"></i>
+                    Notas
+                </button>
+                <button class="nav-item" data-section="assignments">
+                    <i class="fas fa-tasks"></i>
+                    Tarefas
+                </button>
+                <button class="nav-item" data-section="schedule">
+                    <i class="fas fa-calendar-alt"></i>
+                    Horários
+                </button>
+                <button class="nav-item" data-section="materials">
+                    <i class="fas fa-download"></i>
+                    Materiais
+                </button>
+                <button class="nav-item" data-section="messages">
+                    <i class="fas fa-comments"></i>
+                    Mensagens
+                    <span class="notification-badge">2</span>
+                </button>
+                <button class="nav-item" data-section="profile">
+                    <i class="fas fa-user"></i>
+                    Perfil
+                </button>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <div class="search-container">
+                    <i class="fas fa-search" style="color: #6b7280;"></i>
+                    <input type="text" class="search-input" placeholder="Buscar...">
+                </div>
+                <div class="header-right">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell" style="font-size: 20px; color: #6b7280;"></i>
+                        <span class="notification-badge" style="position: absolute; top: -4px; right: -4px;">2</span>
+                    </button>
+                    <div class="user-info">
+                        <div class="avatar">A</div>
+                        <span style="font-size: 14px; font-weight: 500; cursor: pointer;">Ana Silva</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content">
+                <!-- Dashboard Section -->
+                <div id="dashboard-section" class="section">
+                    <div class="welcome-card">
+                        <h2 class="welcome-title">Olá, Ana Silva!</h2>
+                        <p>Você tem 2 tarefas pendentes e sua média geral é 8.5</p>
+                    </div>
+
+                    <div class="grid grid-cols-4">
+                        <div class="stat-card" style="border-left: 4px solid #10b981;">
+                            <i class="fas fa-chart-line stat-icon" style="color: #10b981;"></i>
+                            <div>
+                                <div class="stat-label">Média Geral</div>
+                                <div class="stat-value">8.5</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card" style="border-left: 4px solid #3b82f6;">
+                            <i class="fas fa-tasks stat-icon" style="color: #3b82f6;"></i>
+                            <div>
+                                <div class="stat-label">Tarefas Pendentes</div>
+                                <div class="stat-value">2</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card" style="border-left: 4px solid #f59e0b;">
+                            <i class="fas fa-calendar-check stat-icon" style="color: #f59e0b;"></i>
+                            <div>
+                                <div class="stat-label">Frequência</div>
+                                <div class="stat-value">95%</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card" style="border-left: 4px solid #8b5cf6;">
+                            <i class="fas fa-book stat-icon" style="color: #8b5cf6;"></i>
+                            <div>
+                                <div class="stat-label">Disciplinas</div>
+                                <div class="stat-value">6</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2">
+                        <div class="card">
+                            <h3 style="margin-bottom: 16px;"><i class="fas fa-tasks" style="margin-right: 8px;"></i>Próximas Tarefas</h3>
+                            <div id="upcoming-tasks"></div>
+                        </div>
+
+                        <div class="card">
+                            <h3 style="margin-bottom: 16px;"><i class="fas fa-calendar" style="margin-right: 8px;"></i>Próximas Aulas</h3>
+                            <div id="upcoming-classes"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grades Section -->
+                <div id="grades-section" class="section hidden">
+                    <h2 class="page-title">Minhas Notas</h2>
+                    
+                    <div class="grid grid-cols-4" style="margin-bottom: 24px;">
+                        <div class="card">
+                            <h3 style="margin-bottom: 8px;">Média Geral</h3>
+                            <p style="font-size: 24px; font-weight: bold; color: #10b981; margin: 0;">8.5</p>
+                        </div>
+                        <div class="card">
+                            <h3 style="margin-bottom: 8px;">Melhor Nota</h3>
+                            <p style="font-size: 24px; font-weight: bold; color: #3b82f6; margin: 0;">9.8</p>
+                        </div>
+                        <div class="card">
+                            <h3 style="margin-bottom: 8px;">Aprovado em</h3>
+                            <p style="font-size: 24px; font-weight: bold; color: #f59e0b; margin: 0;">5/6</p>
+                        </div>
+                        <div class="card">
+                            <h3 style="margin-bottom: 8px;">Situação</h3>
+                            <p style="font-size: 18px; font-weight: bold; color: #10b981; margin: 0;">Aprovado</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Disciplina</th>
+                                    <th>Prova 1</th>
+                                    <th>Prova 2</th>
+                                    <th>Trabalhos</th>
+                                    <th>Média</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="grades-table">
+                                <!-- Será preenchido via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Assignments Section -->
+                <div id="assignments-section" class="section hidden">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                        <h2 class="page-title">Minhas Tarefas</h2>
+                        <button class="btn btn-primary" onclick="openSubmissionModal()">
+                            <i class="fas fa-upload"></i>
+                            Enviar Tarefa
+                        </button>
+                    </div>
+
+                    <div id="assignments-list">
+                        <!-- Será preenchido via JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Schedule Section -->
+                <div id="schedule-section" class="section hidden">
+                    <h2 class="page-title">Horários</h2>
+                    
+                    <div class="card">
+                        <h3 style="margin-bottom: 16px;">Grade Horária Semanal</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Horário</th>
+                                    <th>Segunda</th>
+                                    <th>Terça</th>
+                                    <th>Quarta</th>
+                                    <th>Quinta</th>
+                                    <th>Sexta</th>
+                                </tr>
+                            </thead>
+                            <tbody id="schedule-table">
+                                <!-- Será preenchido via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Materials Section -->
+                <div id="materials-section" class="section hidden">
+                    <h2 class="page-title">Materiais de Estudo</h2>
+                    
+                    <div id="materials-list">
+                        <!-- Será preenchido via JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Messages Section -->
+                <div id="messages-section" class="section hidden">
+                    <h2 class="page-title">Mensagens</h2>
+                    
+                    <div class="card">
+                        <h3 style="margin-bottom: 16px;">Chat com Professores</h3>
+                        <div class="chat-container" id="chat-container">
+                            <!-- Mensagens serão carregadas via JavaScript -->
+                        </div>
+                        
+                        <div class="input-group">
+                            <input type="text" class="input" id="message-input" placeholder="Digite sua mensagem...">
+                            <button class="btn btn-primary" onclick="sendMessage()">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Section -->
+                <div id="profile-section" class="section hidden">
+                    <h2 class="page-title">Meu Perfil</h2>
+                    
+                    <div class="grid grid-cols-2">
+                        <div class="card">
+                            <h3 style="margin-bottom: 16px;">Informações Pessoais</h3>
+                            <div style="display: flex; flex-direction: column; gap: 12px;">
+                                <div>
+                                    <strong>Nome:</strong>
+                                    <p>Ana Silva Santos</p>
+                                </div>
+                                <div>
+                                    <strong>Matrícula:</strong>
+                                    <p>2024001</p>
+                                </div>
+                                <div>
+                                    <strong>Curso:</strong>
+                                    <p>9º Ano - Ensino Fundamental</p>
+                                </div>
+                                <div>
+                                    <strong>Email:</strong>
+                                    <p>ana.silva@estudante.escola.com</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3 style="margin-bottom: 16px;">Estatísticas Acadêmicas</h3>
+                            <div style="display: flex; flex-direction: column; gap: 12px;">
+                                <div>
+                                    <strong>Média Geral:</strong>
+                                    <p style="color: #10b981; font-weight: bold;">8.5</p>
+                                </div>
+                                <div>
+                                    <strong>Frequência:</strong>
+                                    <p style="color: #3b82f6; font-weight: bold;">95%</p>
+                                </div>
+                                <div>
+                                    <strong>Disciplinas Cursando:</strong>
+                                    <p>6</p>
+                                </div>
+                                <div>
+                                    <strong>Status:</strong>
+                                    <span class="badge badge-green">Ativo</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="display: flex; align-items: center; gap: 24px;">
+                        <div style="width: 80px; height: 80px; border-radius: 50%; background-color: #10b981; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; font-weight: bold;">A</div>
+                        <div>
+                            <h3 style="margin: 0;">Ana Silva Santos</h3>
+                            <p style="margin: 0; color: #6b7280;">Estudante - 9º Ano</p>
+                            <p style="margin: 0; color: #6b7280;">Matrícula: 2024001</p>
+                        </div>
+                        <button class="btn btn-primary" style="margin-left: auto;">
+                            <i class="fas fa-camera"></i>
+                            Alterar Foto
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Task Submission -->
+    <div id="submission-modal" class="modal">
+        <div class="modal-content">
+            <h3>Enviar Tarefa</h3>
+            <form id="submission-form">
+                <div class="form-group">
+                    <label for="task-select">Selecione a Tarefa:</label>
+                    <select id="task-select" class="input">
+                        <option value="">Escolha uma tarefa...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="submission-file">Arquivo (opcional):</label>
+                    <input type="file" id="submission-file" class="input">
+                </div>
+                <div class="form-group">
+                    <label for="submission-text">Resposta/Comentário:</label>
+                    <textarea id="submission-text" class="input textarea" placeholder="Digite sua resposta ou comentário..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn" onclick="closeSubmissionModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="portal-aluno.js"></script>
+</body>
+</html>
