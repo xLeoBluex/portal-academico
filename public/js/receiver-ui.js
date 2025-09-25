@@ -102,29 +102,61 @@ function linkify(text) {
   });
 }
 
+// --- Gerenciamento de Estado (Lidos) com localStorage ---
+const READ_COMMUNICADOS_KEY = 'readComunicados';
+
+function getReadComunicados() {
+  try {
+    const readIds = localStorage.getItem(READ_COMMUNICADOS_KEY);
+    // Retorna um Set para performance e facilidade de uso
+    return readIds ? new Set(JSON.parse(readIds)) : new Set();
+  } catch (e) {
+    console.error("Erro ao ler 'readComunicados' do localStorage", e);
+    return new Set();
+  }
+}
+
+function addComunicadoAsRead(id) {
+  if (!id) return;
+  const readIds = getReadComunicados();
+  readIds.add(id);
+  try {
+    // Salva como um array JSON
+    localStorage.setItem(READ_COMMUNICADOS_KEY, JSON.stringify(Array.from(readIds)));
+  } catch (e) {
+    console.error("Erro ao salvar 'readComunicados' no localStorage", e);
+  }
+}
+
 // Adicionar comunicado à lista
-function addComunicadoToList(comunicado) {
+function addComunicadoToList(comunicado, isInitial = false) {
   const lista = document.getElementById('listaComunicados');
   if (!lista) return;
   const emptyState = document.getElementById('emptyState');
   
   if (emptyState) {
-    emptyState.remove();
+    emptyState.style.display = 'none';
   }
   
+  const isRead = getReadComunicados().has(comunicado.id);
+  const isTrulyNew = !isRead && !isInitial;
+
   const li = document.createElement('li');
-  li.className = 'comunicado-item new';
+  li.className = `comunicado-item ${isTrulyNew ? 'new' : ''}`;
   li.dataset.id = comunicado.id || generateId();
   
-  const currentTime = formatTime(new Date());
+  // Converte o timestamp do Firebase (se existir) para um objeto Date
+  const timestamp = comunicado.criadoEm && comunicado.criadoEm.toDate ? comunicado.criadoEm.toDate() : new Date();
+  const formattedTime = formatTime(timestamp);
+
   // Aplica linkify e preserva quebras de linha
   const mensagemHtml = linkify(comunicado.mensagem || 'Mensagem do comunicado').replace(/\n/g, '<br>');
   
   li.innerHTML = `
-    <div class="new-badge">NOVO</div>
+    ${!isRead ? '<div class="new-badge">NOVO</div>' : ''}
     <div class="comunicado-header">
       <h3 class="comunicado-title">${escapeHtml(comunicado.titulo || 'Comunicado')}</h3>
-      <span class="comunicado-time">${currentTime}</span>
+      <span class="comunicado-time">${formattedTime}</span>
     </div>
     <div class="comunicado-message">${mensagemHtml}</div>
     <div class="comunicado-footer">
@@ -139,26 +171,43 @@ function addComunicadoToList(comunicado) {
     </div>
   `;
   
-  lista.insertBefore(li, lista.firstChild);
+  if (isInitial) {
+    // No carregamento inicial, adiciona no final para manter a ordem correta
+    lista.appendChild(li);
+  } else {
+    // Para novos comunicados, insere no topo
+    lista.insertBefore(li, lista.firstChild);
+  }
 
-  setTimeout(() => {
-    const badge = li.querySelector('.new-badge');
-    if (badge) {
-      badge.style.animation = 'fadeOut 0.5s ease-out';
-      setTimeout(() => badge.remove(), 500);
-    }
-    li.classList.remove('new');
-  }, 10000);
+  // Se o comunicado já foi lido, aplica o estilo imediatamente
+  if (isRead) {
+    markAsRead(comunicado.id, false); // false para não mostrar confirmação
+  }
 
-  showNotification(`Novo comunicado: ${comunicado.titulo || 'Sem título'}`);
+  // Remove o selo "NOVO" após um tempo e marca como lido no localStorage
+  if (!isRead) {
+    setTimeout(() => {
+      const badge = li.querySelector('.new-badge');
+      if (badge) {
+        badge.style.animation = 'fadeOut 0.5s ease-out';
+        setTimeout(() => badge.remove(), 500);
+      }
+      li.classList.remove('new');
+      // Adiciona ao localStorage para não mostrar como novo novamente
+      addComunicadoAsRead(comunicado.id);
+    }, 10000);
+  }
+
+  // Mostra notificação sonora e toast apenas para comunicados que chegam em tempo real
+  if (isTrulyNew) {
+    showNotification(`Novo comunicado: ${comunicado.titulo || 'Sem título'}`);
+  }
 }
 
 // Marcar como lido
-function markAsRead(id) {
+function markAsRead(id, save = true) {
   const item = document.querySelector(`[data-id="${id}"]`);
   if (item) {
-    item.style.opacity = '0.7';
-    item.style.background = '#f8f9fa';
     
     const markBtn = item.querySelector('.mark-read');
     if (markBtn) {
@@ -167,6 +216,12 @@ function markAsRead(id) {
       markBtn.style.opacity = '0.5';
       markBtn.style.cursor = 'default';
     }
+
+    // Adiciona classe para estilização via CSS
+    item.classList.add('read');
+
+    // Salva o estado no localStorage
+    if (save) addComunicadoAsRead(id);
   }
 }
 
@@ -183,15 +238,14 @@ function deleteComunicado(id) {
       const lista = document.getElementById('listaComunicados');
       // se não houver mais <li>, mostrar estado vazio
       if (lista && lista.querySelectorAll('li').length === 0) {
-        const emptyState = document.createElement('div');
-        emptyState.className = 'empty-state';
-        emptyState.id = 'emptyState';
-        emptyState.innerHTML = `
-          <div class="icon">📬</div>
-          <h3>Nenhum comunicado</h3>
-          <p>Todos os comunicados foram removidos.</p>
-        `;
-        lista.appendChild(emptyState);
+        const emptyState = document.getElementById('emptyState');
+        if (emptyState) {
+          emptyState.style.display = 'block';
+          const h3 = emptyState.querySelector('h3');
+          const p = emptyState.querySelector('p');
+          if (h3) h3.textContent = 'Nenhum comunicado';
+          if (p) p.textContent = 'Todos os comunicados foram removidos ou não há novos.';
+        }
       }
     }, 500);
   }
@@ -213,3 +267,11 @@ window.addEventListener('resize', () => {
 window.addComunicadoToList = addComunicadoToList;
 window.markAsRead = markAsRead;
 window.deleteComunicado = deleteComunicado;
+
+// Adicionei este CSS ao seu arquivo receiver.css para o estilo de "lido"
+/*
+.comunicado-item.read {
+  opacity: 0.7;
+  background: #f8f9fa;
+}
+*/
